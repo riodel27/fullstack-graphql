@@ -1,26 +1,28 @@
-const { ApolloServer } = require('apollo-server');
+const {
+  ApolloServer,
+  ApolloError
+} = require('apollo-server');
 
-const typeDefs = require('./graphql/typeDefs');
+const logger = require('./util/logger')
 const resolvers = require('./graphql/resolvers/index');
+const typeDefs = require('./graphql/typeDefs');
 
 const init = async () => {
-  // setup database connection either mongo or postgresql
-
-  // setup session authentication
-
-  // middlewares
-
-  // logger
-
   const server = new ApolloServer({
     typeDefs,
     resolvers,
-    // context: ({ req }) => ({ req, pubsub })
+    playground: true,
+    formatError: (error) => {
+      if (error.originalError instanceof ApolloError) {
+        logger.error(error)
+      }
+      return error
+    }
   });
 
-  // error handling
-
-  server.listen({ port: 4000 });
+  server.listen({
+    port: 4000
+  });
 };
 
 init();
