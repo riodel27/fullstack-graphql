@@ -12,6 +12,13 @@ const init = async () => {
     typeDefs,
     resolvers,
     playground: true,
+    introspection: true,
+    context:({req}) => {
+      // TODO. log request query or mutation
+      // graphiql has a background request like the instropection.
+      console.log('request body: ', req.body)
+      return
+    },
     formatError: (error) => {
       if (error.originalError instanceof ApolloError) {
         logger.error(error)
