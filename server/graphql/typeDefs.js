@@ -1,12 +1,9 @@
 /* eslint-disable no-tabs */
-const { gql } = require('apollo-server');
+const {
+  gql,
+} = require('apollo-server');
 
 module.exports = gql`
-  input AdministratorInput {
-    name: String
-    email: String!
-    password: String!
-  }
   type Administrator {
     id: ID!
     name: String
@@ -19,6 +16,6 @@ module.exports = gql`
 	  administrators: [Administrator]
   }
   type Mutation {
-    createAdministrator(administratorInput:AdministratorInput): String
+    createAdministrator(name:String, email:String!, password:String!): Administrator
   }
 `;
