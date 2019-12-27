@@ -1,7 +1,7 @@
 const Administrator = require('../schema/administrator');
 
 
-const Create = async (data) => {
+const create = async (data) => {
   try {
     const administrator = await Administrator.create(data);
     return administrator;
@@ -10,7 +10,7 @@ const Create = async (data) => {
   }
 };
 
-const Find = async (query) => {
+const find = async (query) => {
   try {
     const administrators = await Administrator.find(query);
     return administrators;
@@ -19,7 +19,7 @@ const Find = async (query) => {
   }
 };
 
-const FindOne = async (query) => {
+const findOne = async (query) => {
   try {
     const administrator = await Administrator.findOne(query);
     return administrator;
@@ -28,7 +28,7 @@ const FindOne = async (query) => {
   }
 };
 
-const FindOneAndUpdate = async (filter, data, options = {}) => {
+const findOneAndUpdate = async (filter, data, options = {}) => {
   try {
     const administrator = await Administrator.findOneAndUpdate(filter, {
       ...data,
@@ -43,7 +43,7 @@ const FindOneAndUpdate = async (filter, data, options = {}) => {
   }
 };
 
-const DeleteOne = async (filter) => {
+const deleteOne = async (filter) => {
   try {
     const deletedAdministrator = await Administrator.deleteOne(filter);
     return deletedAdministrator;
@@ -53,9 +53,9 @@ const DeleteOne = async (filter) => {
 };
 
 module.exports = {
-  Create,
-  Find,
-  FindOne,
-  FindOneAndUpdate,
-  DeleteOne,
+  create,
+  find,
+  findOne,
+  findOneAndUpdate,
+  deleteOne,
 };

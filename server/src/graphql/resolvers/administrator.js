@@ -6,7 +6,7 @@ const AdministratorService = require('../../services/administrator.service');
 module.exports = {
   Query: {
     async administrators() {
-      const administrators = await AdministratorService.Find({});
+      const administrators = await AdministratorService.listsOfAdministrator();
       return administrators;
     },
   },
@@ -35,13 +35,13 @@ module.exports = {
       // problem with using joi validation is that I cannot make an array of errors.
       // todo: create custom validation??
 
-      const admin = await AdministratorService.FindOne({ email });
+      const admin = await AdministratorService.findOneAdministrator({ email });
 
       if (admin) {
         throw new UserInputError('Email already exist', { invalidArgs: Object.keys(args) });
       }
 
-      const administrator = await AdministratorService.Create(args);
+      const administrator = await AdministratorService.createAdministrator({ username: name, email, password });
 
       return administrator;
     },

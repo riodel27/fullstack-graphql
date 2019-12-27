@@ -6,7 +6,7 @@ const {
 module.exports = gql`
   type Administrator {
     id: ID!
-    name: String
+    username: String
     email: String!
     password: String!
     createdAt: String

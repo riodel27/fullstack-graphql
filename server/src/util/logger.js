@@ -1,16 +1,11 @@
-const dotenv = require('dotenv');
-const {
-  createLogger,
-  format,
-  transports
-} = require('winston');
+const { createLogger, format, transports } = require('winston');
 
-dotenv.config();
+const { logLevel, nodeEnv } = require('../config/index');
 
 
 // https://github.com/winstonjs/winston#logging
 // { error: 0, warn: 1, info: 2, verbose: 3, debug: 4, silly: 5 }
-const level = process.env.LOG_LEVEL || 'debug';
+const level = logLevel || 'debug';
 
 function formatParams(info) {
   const {
@@ -43,7 +38,7 @@ const productionFormat = format.combine(
 
 let logger;
 
-if (process.env.NODE_ENV !== 'production') {
+if (nodeEnv !== 'production') {
   logger = createLogger({
     level,
     format: developmentFormat,
@@ -56,10 +51,10 @@ if (process.env.NODE_ENV !== 'production') {
     transports: [
       new transports.File({
         filename: './logs/error.log',
-        level: 'error'
+        level: 'error',
       }),
       new transports.File({
-        filename: './logs/combined.log'
+        filename: './logs/combined.log',
       }),
     ],
   });
