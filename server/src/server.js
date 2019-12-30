@@ -23,9 +23,9 @@ const {
     playground: true,
     introspection: true,
     context: ({
-      req
+      req,
     }) => {
-      // TODO. log request query or mutation
+      // TODO log request query or mutation
       // graphiql has a background request like the instropection.
       // console.log('request body: ', req.body)
     },
@@ -43,5 +43,8 @@ const {
 
   app.listen({
     port,
-  }, () => logger.info(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`));
+  },
+  () => logger.info(
+    `🚀 Server ready at http://localhost:4000${server.graphqlPath}`,
+  ));
 })();

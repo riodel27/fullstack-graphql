@@ -1,6 +1,6 @@
-const { ApolloError, AuthenticationError, UserInputError } = require('apollo-server');
-const Joi = require('@hapi/joi');
+const { UserInputError } = require('apollo-server');
 
+const { validateCreateAdministrator } = require('../../util/validators');
 const AdministratorService = require('../../services/administrator.service');
 
 module.exports = {
@@ -18,22 +18,11 @@ module.exports = {
         password,
       } = args;
 
-      try {
-        const schema = Joi.object({
-          email: Joi.string().email().required(),
-          password: Joi.string().regex(/^(?=.*[a-z].*[a-z])(?=.*[A-Z].*[A-Z])(?=.*\d.*\d)(?=.*\W.*\W)[a-zA-Z0-9\S]{20,}$/).required(),
-        });
-        const input = {
-          email,
-          password,
-        };
-        await schema.validateAsync(input);
-      } catch (error) {
-        throw new UserInputError(error.message, { invalidArgs: Object.keys(args) });
-      }
+      const { valid, errors } = validateCreateAdministrator(email, password);
 
-      // problem with using joi validation is that I cannot make an array of errors.
-      // todo: create custom validation??
+      if (!valid) {
+        throw new UserInputError('Errors', { errors });
+      }
 
       const admin = await AdministratorService.findOneAdministrator({ email });
 
@@ -41,9 +30,14 @@ module.exports = {
         throw new UserInputError('Email already exist', { invalidArgs: Object.keys(args) });
       }
 
-      const administrator = await AdministratorService.createAdministrator({ username: name, email, password });
+      const administrator = await AdministratorService.createAdministrator({
+        username: name,
+        email,
+        password,
+      });
 
       return administrator;
     },
+    // TODO Login
   },
 };
