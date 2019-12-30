@@ -37,6 +37,8 @@ const {
     },
   });
 
+  // TODO session token implementation
+
   server.applyMiddleware({
     app,
   });

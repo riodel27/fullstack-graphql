@@ -1,6 +1,6 @@
 const { UserInputError } = require('apollo-server');
 
-const { validateCreateAdministrator } = require('../../util/validators');
+const { validateCreateAdministrator, validateLogin } = require('../../util/validators');
 const AdministratorService = require('../../services/administrator.service');
 
 module.exports = {
@@ -38,6 +38,22 @@ module.exports = {
 
       return administrator;
     },
-    // TODO Login
+    async login(_, args) {
+      const { email, password } = args;
+
+      const { valid, errors } = validateLogin(email, password);
+
+      if (!valid) {
+        throw new UserInputError('Errors', { errors });
+      }
+
+      const administrator = await AdministratorService.findOneAdministrator({ email, password });
+
+      if (!administrator) {
+        throw new UserInputError('Incorrect email/password');
+      }
+
+      return administrator;
+    },
   },
 };
