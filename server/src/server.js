@@ -33,6 +33,7 @@ const {
       if (error.originalError instanceof ApolloError) {
         logger.error(error);
       }
+      logger.error(error);
       return error;
     },
   });

@@ -3,6 +3,7 @@ const { UserInputError } = require('apollo-server');
 const { validateCreateAdministrator, validateLogin } = require('../../util/validators');
 const AdministratorService = require('../../services/administrator.service');
 
+
 module.exports = {
   Query: {
     async administrators() {
