@@ -24,11 +24,11 @@ const {
     introspection: true,
     context: ({
       req,
-    }) => {
-      // TODO log request query or mutation
-      // graphiql has a background request like the instropection.
-      // console.log('request body: ', req.body)
-    },
+    }) =>
+    // TODO log request query or mutation
+    // graphiql has a background request like the instropection.
+    // console.log('request body: ', req.body)
+      ({ req }),
     formatError: (error) => {
       if (error.originalError instanceof ApolloError) {
         logger.error(error);
@@ -37,8 +37,6 @@ const {
       return error;
     },
   });
-
-  // TODO session token implementation
 
   server.applyMiddleware({
     app,

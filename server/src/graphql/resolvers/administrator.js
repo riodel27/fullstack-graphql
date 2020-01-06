@@ -6,7 +6,13 @@ const AdministratorService = require('../../services/administrator.service');
 
 module.exports = {
   Query: {
-    async administrators() {
+    async administrators(_, __, ctx) {
+      // TODO: expect user session is hashed. ctx.req.sesson.user
+      // TODO: manage of session timeout? through redis or cookie browser?
+      // TODO: how to check the session in redis running in docker?
+
+      console.log('session: ', ctx.req.session);
+      console.log('session user: ', ctx.req.session.user);
       const administrators = await AdministratorService.listsOfAdministrator();
       return administrators;
     },
@@ -39,7 +45,7 @@ module.exports = {
 
       return administrator;
     },
-    async login(_, args) {
+    async login(_, args, ctx) {
       const { email, password } = args;
 
       const { valid, errors } = validateLogin(email, password);
@@ -53,6 +59,9 @@ module.exports = {
       if (!administrator) {
         throw new UserInputError('Incorrect email/password');
       }
+
+      // TODO: hash user and store to session.
+      ctx.req.session.user = email;
 
       return administrator;
     },
