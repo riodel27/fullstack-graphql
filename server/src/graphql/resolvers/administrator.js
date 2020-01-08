@@ -1,6 +1,6 @@
-const { UserInputError } = require('apollo-server');
+const { UserInputError, AuthenticationError } = require('apollo-server');
 
-const { decryptSession, sessionize } = require('../../util/helper');
+const { sessionize } = require('../../util/helper');
 const { validateCreateAdministrator, validateLogin } = require('../../util/validators');
 const AdministratorService = require('../../services/administrator.service');
 
@@ -8,8 +8,8 @@ const AdministratorService = require('../../services/administrator.service');
 module.exports = {
   Query: {
     async administrators(_, __, ctx) {
-      // decrypt session only when there is session user in ctx request.
-      const administrator = decryptSession(ctx.req.session.user);
+      if (!ctx.req.session.user) throw new AuthenticationError('you must be logged in');
+
       const administrators = await AdministratorService.listsOfAdministrator();
       return administrators;
     },

@@ -13,9 +13,6 @@ const {
   port,
 } = require('./config');
 
-
-// TODO: where to setup authentication/authorization middlware
-
 (async () => {
   /** initialize database */
   await config.initializeDB();
@@ -30,9 +27,7 @@ const {
      * graphiql has a background request like the instropection.
      * console.log('request body: ', req.body)
      */
-    context: ({
-      req,
-    }) => ({ req }),
+    context: ({ req }) => ({ req }),
     formatError: (error) => {
       if (error.originalError instanceof ApolloError) {
         logger.error(error);
