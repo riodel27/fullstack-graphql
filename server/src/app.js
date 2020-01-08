@@ -5,6 +5,12 @@ const redisStore = require('connect-redis')(session);
 
 const client = redis.createClient();
 
+const {
+  redisSecret,
+  redisHost,
+  redisPort,
+  redisTtl,
+} = require('./config');
 const config = require('./config/init');
 
 const app = express();
@@ -13,12 +19,12 @@ const app = express();
 app.use(config.cors);
 
 app.use(session({
-  secret: 'your_secret',
+  secret: redisSecret,
   store: new redisStore({
-    host: 'localhost',
-    port: 6379,
+    host: redisHost,
+    port: redisPort,
     client,
-    ttl: 5,
+    ttl: redisTtl,
   }),
   saveUninitialized: false,
   resave: false,

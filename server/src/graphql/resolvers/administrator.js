@@ -1,5 +1,6 @@
 const { UserInputError } = require('apollo-server');
 
+const { decryptSession, sessionize } = require('../../util/helper');
 const { validateCreateAdministrator, validateLogin } = require('../../util/validators');
 const AdministratorService = require('../../services/administrator.service');
 
@@ -7,12 +8,8 @@ const AdministratorService = require('../../services/administrator.service');
 module.exports = {
   Query: {
     async administrators(_, __, ctx) {
-      // TODO: expect user session is hashed. ctx.req.sesson.user
-      // TODO: manage of session timeout? through redis or cookie browser?
-      // TODO: how to check the session in redis running in docker?
-
-      console.log('session: ', ctx.req.session);
-      console.log('session user: ', ctx.req.session.user);
+      // decrypt session only when there is session user in ctx request.
+      const administrator = decryptSession(ctx.req.session.user);
       const administrators = await AdministratorService.listsOfAdministrator();
       return administrators;
     },
@@ -60,8 +57,7 @@ module.exports = {
         throw new UserInputError('Incorrect email/password');
       }
 
-      // TODO: hash user and store to session.
-      ctx.req.session.user = email;
+      ctx.req.session.user = sessionize(administrator);
 
       return administrator;
     },

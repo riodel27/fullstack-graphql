@@ -13,6 +13,9 @@ const {
   port,
 } = require('./config');
 
+
+// TODO: where to setup authentication/authorization middlware
+
 (async () => {
   /** initialize database */
   await config.initializeDB();
@@ -20,15 +23,16 @@ const {
   const server = new ApolloServer({
     typeDefs,
     resolvers,
-    playground: true,
+    playground: true, // TODO set to false when in production
     introspection: true,
+    /**
+     * TODO log request query or mutation inside context
+     * graphiql has a background request like the instropection.
+     * console.log('request body: ', req.body)
+     */
     context: ({
       req,
-    }) =>
-    // TODO log request query or mutation
-    // graphiql has a background request like the instropection.
-    // console.log('request body: ', req.body)
-      ({ req }),
+    }) => ({ req }),
     formatError: (error) => {
       if (error.originalError instanceof ApolloError) {
         logger.error(error);
@@ -38,14 +42,7 @@ const {
     },
   });
 
-  server.applyMiddleware({
-    app,
-  });
+  server.applyMiddleware({ app });
 
-  app.listen({
-    port,
-  },
-  () => logger.info(
-    `🚀 Server ready at http://localhost:4000${server.graphqlPath}`,
-  ));
+  app.listen({ port }, () => logger.info(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`));
 })();

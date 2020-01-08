@@ -9,6 +9,6 @@ module.exports = {
   nodeEnv: process.env.NODE_ENV,
   redisSecret: process.env.REDIS_SECRET,
   redisHost: process.env.REDIS_HOST,
-  redisPort: process.env.REDIS_PORT,
-  redisTtl: process.env.REDIS_TTL,
+  redisPort: JSON.parse(process.env.REDIS_PORT),
+  redisTtl: JSON.parse(process.env.REDIS_TTL),
 };
