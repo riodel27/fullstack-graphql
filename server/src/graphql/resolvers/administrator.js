@@ -15,7 +15,9 @@ module.exports = {
     },
   },
   Mutation: {
-    async createAdministrator(_, args) {
+    async createAdministrator(_, args, ctx) {
+      if (!ctx.req.session.user) throw new AuthenticationError('you must be logged in');
+
       const {
         name,
         email,
