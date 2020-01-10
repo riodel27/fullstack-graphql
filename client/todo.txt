@@ -1,4 +1,4 @@
-1. setup react
-2. login page
-3. admin page
-4. setup session 
+1. pages
+2. components
+3. router
+4. setup react environment

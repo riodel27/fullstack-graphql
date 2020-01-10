@@ -8,7 +8,7 @@ const AdministratorService = require('../../services/administrator.service');
 module.exports = {
   Query: {
     async administrators(_, __, ctx) {
-      if (!ctx.req.session.user) throw new AuthenticationError('you must be logged in');
+      // if (!ctx.req.session.user) throw new AuthenticationError('you must be logged in');
 
       const administrators = await AdministratorService.listsOfAdministrator();
       return administrators;
