@@ -9,7 +9,7 @@ module.exports = {
   Query: {
     async administrators(_, __, ctx) {
       // if (!ctx.req.session.user) throw new AuthenticationError('you must be logged in');
-
+      console.log('session: ', ctx.req.session.user);
       const administrators = await AdministratorService.listsOfAdministrator();
       return administrators;
     },

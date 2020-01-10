@@ -11,4 +11,5 @@ module.exports = {
   redisHost: process.env.REDIS_HOST,
   redisPort: JSON.parse(process.env.REDIS_PORT),
   redisTtl: JSON.parse(process.env.REDIS_TTL),
+  whitelisted: process.env.WHITELIST,
 };

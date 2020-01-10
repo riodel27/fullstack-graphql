@@ -37,7 +37,7 @@ const {
     },
   });
 
-  server.applyMiddleware({ app });
+  server.applyMiddleware({ app, cors: false });
 
   app.listen({ port }, () => logger.info(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`));
 })();
