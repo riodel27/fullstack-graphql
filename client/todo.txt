@@ -1,4 +1,17 @@
-1. pages
-2. components
-3. router
-4. setup react environment
+resource: https://www.apollographql.com/docs/react/data/local-state/
+
+TODO:
+1. login form.
+2. redirect to login form if session is expired.
+3. apollo error handling/message.
+4. setup react environment.
+
+
+LEARN:
+1. react hooks
+2. apollo local state management
+3. React’s Context API
+
+
+RESOURCES:
+1. react-router : https://medium.com/better-programming/react-router-architecture-thats-simple-scalable-and-protected-da896827f946

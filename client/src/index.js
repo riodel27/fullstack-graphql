@@ -14,7 +14,7 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
   link: new HttpLink({
     uri: 'http://localhost:4000/graphql',
-    credentials: 'include'
+    credentials: 'include' // allow cookie to be stored in the browser and included in every request (usually for session based authentication)
   }),
 });
 

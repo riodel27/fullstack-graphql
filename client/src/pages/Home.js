@@ -16,9 +16,10 @@ function Home(){
   const { loading, error, data } = useQuery(ADMINISTRATORS);
 
   if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error :(</p>;
-
-  console.log('administrators: ', data)  
+  
+  if (error) {
+    return <p>Error :(</p>;
+  }
 
 	if (error) return <p>error</p>
 

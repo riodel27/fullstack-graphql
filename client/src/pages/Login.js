@@ -1,32 +1,90 @@
-import React from 'react'
+import React, {
+  useState
+} from 'react'
 import {
   gql,
   useMutation
 } from '@apollo/client';
 
-const LOGIN = gql`
-  mutation{
-    login(email:"yawa@gmail.com",password:"EKs%Y]sdfasd$dfE23)N,>&-aP7Mn"){
-      username
-    }
-  }
-`;
+import {useForm} from '../util/hooks'
+import {loginValidation} from '../util/validators'
 
-function Login(){
-  const [login, { data }] = useMutation(LOGIN);
-  console.log('data: ', data)
+
+function Login(props){
+
+  const [graphqlErrors, setGraphqlError] = useState([])
+
+  const {
+    onChange,
+    onSubmit,
+    values,
+    errors
+  } = useForm(LoginCallback, {
+    email: "",
+    password: ""
+  }, loginValidation)
+
+  const [login] = useMutation(LOGIN, {
+    update(_, result) {
+      props.history.push('/')
+    },
+    onError(err) {
+      setGraphqlError(err.graphQLErrors)
+    }
+  });
+
+  function LoginCallback() {
+    login({
+      variables: values
+    });
+  }
+
+  //TODO: improve error handling/display to UI.
+
   return (
     <div>
-      <form
-        onSubmit={e => {
-          e.preventDefault();
-          login();
-        }}
-      >
+      <form onSubmit = {onSubmit}>
+        <input type="email" name="email" placeholder="email" onChange={onChange}></input>
+        <input type="password" name="password" placeholder="password" onChange={onChange}></input>
         <button type="submit">Login</button>
       </form>
+
+      {/* validation error */}
+      {Object.keys(errors).length > 0 && (
+				<div className="ui error message">
+					<ul style={{color:"red"}} className="list">
+						{
+							Object.values(errors).map(value => (
+								<li key={value}>{value}</li>
+							))
+						}
+					</ul>
+				</div>
+			)}
+
+      {/* graphql error response */}
+      {graphqlErrors.length > 0 && (
+				<div className="ui error message">
+					<ul style={{color:"red"}} className="list">
+						{
+							graphqlErrors.map(({message},i) => (
+								<li key={i}>{message}</li>
+							))
+						}
+					</ul>
+				</div>
+			)}
+
     </div>
   );
 }
+
+const LOGIN = gql`
+  mutation login($email: String! $password: String!) {
+    login(email:$email password:$password) {
+			username
+		}
+  }
+`;
 
 export default Login
