@@ -1,10 +1,7 @@
 resource: https://www.apollographql.com/docs/react/data/local-state/
 
 TODO:
-1. login form.
-2. redirect to login form if session is expired.
-3. apollo error handling/message.
-4. setup react environment.
+1. setup react environment.
 
 
 LEARN:

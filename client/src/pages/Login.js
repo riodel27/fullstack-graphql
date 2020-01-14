@@ -1,17 +1,11 @@
-import React, {
-  useState
-} from 'react'
-import {
-  gql,
-  useMutation
-} from '@apollo/client';
+import React, { useState } from 'react'
+import { gql, useMutation } from '@apollo/client';
 
-import {useForm} from '../util/hooks'
-import {loginValidation} from '../util/validators'
+import { useForm } from '../util/hooks'
+import { loginValidation } from '../util/validators'
 
 
 function Login(props){
-
   const [graphqlErrors, setGraphqlError] = useState([])
 
   const {
@@ -49,8 +43,8 @@ function Login(props){
         <button type="submit">Login</button>
       </form>
 
-      {/* validation error */}
-      {Object.keys(errors).length > 0 && (
+      {/* client validation error */}
+      { Object.keys(errors).length > 0 && (
 				<div className="ui error message">
 					<ul style={{color:"red"}} className="list">
 						{
@@ -60,10 +54,10 @@ function Login(props){
 						}
 					</ul>
 				</div>
-			)}
+			) }
 
       {/* graphql error response */}
-      {graphqlErrors.length > 0 && (
+      { graphqlErrors.length > 0 && (
 				<div className="ui error message">
 					<ul style={{color:"red"}} className="list">
 						{
@@ -73,7 +67,7 @@ function Login(props){
 						}
 					</ul>
 				</div>
-			)}
+			) }
 
     </div>
   );

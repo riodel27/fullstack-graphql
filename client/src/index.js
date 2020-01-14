@@ -1,26 +1,51 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { onError } from 'apollo-link-error'
+import { ApolloLink } from 'apollo-link';
+import { createHttpLink } from 'apollo-link-http';
 import {
   ApolloClient,
-  HttpLink,
   InMemoryCache,
   ApolloProvider,
 } from '@apollo/client';
 
 import App from './App';
+import browserHistory from './util/browserHistory'
+import ErrorBoundary from './util/errorBoundary'
 import * as serviceWorker from './serviceWorker';
+
+// handle graphql server or network error.
+const errorLink = onError(({ networkError, graphQLErrors }) => {
+  if (graphQLErrors) {
+    graphQLErrors.map(({message, extensions}) => {
+      if(extensions.code === 'UNAUTHENTICATED'){
+        console.log('UNAUTHENTICATED')
+        // TODO: setup proper client logger. maybe setup a hook or persist the logger for debug.
+        browserHistory.push('/login')
+      }
+    });
+  }
+  
+  if (networkError){
+    console.log(`[Network error]: ${networkError}`);
+  }
+});
+
+const httpLink = createHttpLink({
+  uri: 'http://localhost:4000/graphql',
+  credentials: 'include' //session based authentication
+});
 
 const client = new ApolloClient({
   cache: new InMemoryCache(),
-  link: new HttpLink({
-    uri: 'http://localhost:4000/graphql',
-    credentials: 'include' // allow cookie to be stored in the browser and included in every request (usually for session based authentication)
-  }),
+  link: ApolloLink.from([errorLink, httpLink])
 });
 
 ReactDOM.render(
   <ApolloProvider client={client}>
-    <App />
+    <ErrorBoundary>
+      <App />
+    </ErrorBoundary>
   </ApolloProvider>,
   document.getElementById('root'),
 );
