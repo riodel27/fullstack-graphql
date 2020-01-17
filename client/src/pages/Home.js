@@ -4,6 +4,7 @@ import {
   useQuery
 } from '@apollo/client';
 
+
 const ADMINISTRATORS = gql`
   {
     administrators{

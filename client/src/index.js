@@ -12,6 +12,8 @@ import {
 import App from './App';
 import browserHistory from './util/browserHistory'
 import ErrorBoundary from './util/errorBoundary'
+
+import config  from'./config/index'
 import * as serviceWorker from './serviceWorker';
 
 // handle graphql server or network error.
@@ -32,7 +34,7 @@ const errorLink = onError(({ networkError, graphQLErrors }) => {
 });
 
 const httpLink = createHttpLink({
-  uri: 'http://localhost:4000/graphql',
+  uri: config.graphqlUri,
   credentials: 'include' //session based authentication
 });
 

@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { gql, useMutation } from '@apollo/client';
 
+import config from '../config/index'
 import { useForm } from '../util/hooks'
 import { loginValidation } from '../util/validators'
 
