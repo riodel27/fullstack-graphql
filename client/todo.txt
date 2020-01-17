@@ -1,7 +1,7 @@
 resource: https://www.apollographql.com/docs/react/data/local-state/
 
 TODO:
-1. setup eslint and formatter for react.
+1. Administrator Service.
 
 
 LEARN:
