@@ -16,8 +16,14 @@ const findOneAdministrator = async (query) => {
   return administrator;
 };
 
+const updateAdministrator = async (filter, data) => {
+  const administrator = await AdministratorDb.findOneAndUpdate(filter, data);
+  return administrator;
+};
+
 module.exports = {
   createAdministrator,
   listsOfAdministrator,
   findOneAdministrator,
+  updateAdministrator,
 };

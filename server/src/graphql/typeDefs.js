@@ -4,6 +4,11 @@ const {
 } = require('apollo-server');
 
 module.exports = gql`
+  input UpdateUserInput {
+    username: String
+    email: String
+    password: String
+  }
   type Administrator {
     id: ID!
     username: String
@@ -17,6 +22,7 @@ module.exports = gql`
   }
   type Mutation {
     createAdministrator(name:String, email:String!, password:String!): Administrator
+    updateAdministrator(id:ID, patch:UpdateUserInput ): Administrator
     login(email:String!,password:String!): Administrator
   }
 `;
