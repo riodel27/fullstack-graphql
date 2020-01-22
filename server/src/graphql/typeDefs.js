@@ -18,6 +18,7 @@ module.exports = gql`
     updatedAt: String
   }
   type Query {
+    administrator(id:ID): Administrator
 	  administrators: [Administrator]
   }
   type Mutation {

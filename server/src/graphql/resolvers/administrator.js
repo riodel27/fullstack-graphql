@@ -1,12 +1,40 @@
-const { UserInputError, AuthenticationError, ApolloError } = require('apollo-server');
+/* eslint-disable no-underscore-dangle */
+const {
+  UserInputError, AuthenticationError, ApolloError, ForbiddenError,
+} = require('apollo-server');
 
-const { sessionize, isValidMongoId, formatMutationInput } = require('../../util/helper');
+const {
+  sessionize, isValidMongoId, formatMutationInput, decryptSession,
+} = require('../../util/helper');
 const { validateCreateAdministrator, validateLogin, validateUpdateAdministrator } = require('../../util/validators');
 const AdministratorService = require('../../services/administrator.service');
 
 
 module.exports = {
   Query: {
+    async administrator(_, args, ctx) {
+      if (!ctx.req.session.user) throw new AuthenticationError('you must be logged in');
+
+      const { id } = args;
+
+      const userSession = decryptSession(ctx.req.session.user);
+
+      const adminUserSession = await AdministratorService.findOneAdministrator({ _id: userSession._id });
+
+      if (!adminUserSession) throw new ForbiddenError('Restricted to administrator user only');
+
+      try {
+        isValidMongoId(id);
+      } catch (error) {
+        throw new ApolloError(error.message, 500);
+      }
+
+      const administrator = await AdministratorService.findOneAdministrator({ _id: id });
+
+      if (!administrator) throw new ApolloError('Unknown administrator', 404);
+
+      return administrator;
+    },
     async administrators(_, __, ctx) {
       if (!ctx.req.session.user) throw new AuthenticationError('you must be logged in');
 
@@ -57,15 +85,11 @@ module.exports = {
 
       const administrator = await AdministratorService.findOneAdministrator({ _id: id });
 
-      if (!administrator) {
-        throw new ApolloError('Unknown administrator', 404);
-      }
+      if (!administrator) throw new ApolloError('Unknown administrator', 404);
 
       const adminCounts = await AdministratorService.countAdministrators({});
 
-      if (adminCounts === 1) {
-        throw new UserInputError('Atleast one administrator should be active', 403);
-      }
+      if (adminCounts === 1) throw new UserInputError('Atleast one administrator should be active', 403);
 
       await AdministratorService.deleteAdministrator({ _id: id });
 
