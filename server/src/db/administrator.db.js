@@ -1,10 +1,27 @@
 const Administrator = require('../schema/administrator');
 
+const count = async (query) => {
+  try {
+    const adminCount = await Administrator.count(query);
+    return adminCount;
+  } catch (error) {
+    throw Error(error);
+  }
+};
 
 const create = async (data) => {
   try {
     const administrator = await Administrator.create(data);
     return administrator;
+  } catch (error) {
+    throw Error(error);
+  }
+};
+
+const deleteOne = async (filter) => {
+  try {
+    const deletedAdministrator = await Administrator.deleteOne(filter);
+    return deletedAdministrator;
   } catch (error) {
     throw Error(error);
   }
@@ -43,16 +60,9 @@ const findOneAndUpdate = async (filter, data, options = {}) => {
   }
 };
 
-const deleteOne = async (filter) => {
-  try {
-    const deletedAdministrator = await Administrator.deleteOne(filter);
-    return deletedAdministrator;
-  } catch (error) {
-    throw Error(error);
-  }
-};
 
 module.exports = {
+  count,
   create,
   find,
   findOne,

@@ -44,6 +44,49 @@ module.exports = {
 
       return administrator;
     },
+    async deleteAdministrator(_, args, ctx) {
+      if (!ctx.req.session.user) throw new AuthenticationError('you must be logged in');
+
+      const { id } = args;
+
+      try {
+        isValidMongoId(id);
+      } catch (error) {
+        throw new ApolloError(error.message, 500);
+      }
+
+      const administrator = await AdministratorService.findOneAdministrator({ _id: id });
+
+      if (!administrator) {
+        throw new ApolloError('Unknown administrator', 404);
+      }
+
+      const adminCounts = await AdministratorService.countAdministrators({});
+
+      if (adminCounts === 1) {
+        throw new UserInputError('Atleast one administrator should be active', 403);
+      }
+
+      await AdministratorService.deleteAdministrator({ _id: id });
+
+      return 'entry deleted';
+    },
+    async login(_, args, ctx) {
+      const { email, password } = args;
+
+      const { valid, errors } = validateLogin(email, password);
+
+      if (!valid) throw new UserInputError('Errors', { errors });
+
+      const administrator = await AdministratorService.findOneAdministrator({ email, password });
+
+      if (!administrator) throw new UserInputError('Incorrect email/password');
+
+
+      ctx.req.session.user = sessionize(administrator);
+
+      return administrator;
+    },
     async updateAdministrator(_, args, ctx) {
       if (!ctx.req.session.user) throw new AuthenticationError('you must be logged in');
 
@@ -74,22 +117,6 @@ module.exports = {
       const updatedAdministrator = await AdministratorService.updateAdministrator({ _id: id }, administratorInputData);
 
       return updatedAdministrator;
-    },
-    async login(_, args, ctx) {
-      const { email, password } = args;
-
-      const { valid, errors } = validateLogin(email, password);
-
-      if (!valid) throw new UserInputError('Errors', { errors });
-
-      const administrator = await AdministratorService.findOneAdministrator({ email, password });
-
-      if (!administrator) throw new UserInputError('Incorrect email/password');
-
-
-      ctx.req.session.user = sessionize(administrator);
-
-      return administrator;
     },
   },
 };

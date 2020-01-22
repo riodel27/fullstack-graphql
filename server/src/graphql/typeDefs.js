@@ -22,7 +22,8 @@ module.exports = gql`
   }
   type Mutation {
     createAdministrator(name:String, email:String!, password:String!): Administrator
-    updateAdministrator(id:ID, patch:UpdateUserInput ): Administrator
+    deleteAdministrator(id:ID): String
     login(email:String!,password:String!): Administrator
+    updateAdministrator(id:ID, patch:UpdateUserInput ): Administrator
   }
 `;
