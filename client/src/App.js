@@ -4,14 +4,14 @@ import { Router } from "react-router"
 
 import browserHistory from "./util/browserHistory"
 
-import Home from "./pages/Home"
+import Administrator from "./pages/Administrator"
 import Login from "./pages/Login"
 
 function App() {
   return (
     <Router history={browserHistory}>
       <div className="ui container">
-        <Route exact path="/" component={Home} />
+        <Route exact path="/" component={Administrator} />
         <Route exact path="/login" component={Login} />
       </div>
     </Router>
