@@ -12,3 +12,9 @@ LEARN:
 
 RESOURCES:
 1. react-router : https://medium.com/better-programming/react-router-architecture-thats-simple-scalable-and-protected-da896827f946
+
+
+
+Readme.
+- use Formik for form.
+- use multiple ui framework just to differentiate.(material-ui, semantic-ui-react and ant design).
